@@ -1,0 +1,70 @@
+<html>
+	<head>
+        <style>
+            input {
+                width: 100%;
+                height: 60px;    
+            }
+        </style>
+    </head>
+	<body bgcolor="floralwhite">
+		<h1>Base64 for BaashaLive</h1>
+        <button onclick="AddMoreInput()">Add More Input +</button>
+		<form id="form">
+            <div id="inputs">
+                <input name="0" type="text" placeholder="Enter Link/Url" />
+            </div>
+            <input type="submit" value="Generate" />
+        </form>
+        <div id="output_wrapper">
+            <div id="output"></div>
+            <button onclick="copyToClipboard()">Copy Base64 to clipboard</button>
+        </div>
+	</body>
+	<script>
+        const f = document.getElementById("form")
+        const inputs = document.getElementById("inputs")
+        let name = 1
+
+        function AddMoreInput() {
+            const i = document.createElement("input")
+            i.type = "text"
+            i.placeholder = "Enter Link/Url"
+            i.name = `${name}`
+            name += 1
+
+            inputs.appendChild(i)
+        }
+
+        function formSubmit(e) {
+            e.preventDefault()
+            const nodes = document.querySelectorAll("input[type='text']")
+            const data = []
+            for (const n of nodes) {
+                if (n.value != "")
+                    data.push(n.value)
+            }
+
+            if (data.length > 0) {
+                const json = JSON.stringify({ data })
+                const base64 = btoa(json)
+
+                console.log(data, base64)
+
+                document.getElementById("output").innerHTML = "baashaBase64::" + base64
+            } else {
+                // TODO
+            }
+        }
+
+        function copyToClipboard() {
+            const div = document.getElementById("output")
+
+            if (div.innerHTML != "") {
+                navigator.clipboard.writeText(div.innerHTML)
+            }
+        }
+
+        f.addEventListener("submit", (e) => formSubmit(e))
+    </script>   
+</html>
